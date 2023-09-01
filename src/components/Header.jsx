@@ -3,13 +3,12 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
-import avatarImage from '@/images/avatar.jpg'
 
 function CloseIcon(props) {
   return (
@@ -82,7 +81,7 @@ function MobileNavItem({ href, children }) {
   )
 }
 
-function MobileNavigation(props) {
+function MobileNavigation({slug, ...props}) {
   return (
     <Popover {...props}>
       <Popover.Button className="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20">
@@ -124,11 +123,9 @@ function MobileNavigation(props) {
             </div>
             <nav className="mt-6">
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                <MobileNavItem href="/about">About</MobileNavItem>
-                <MobileNavItem href="/articles">Articles</MobileNavItem>
-                <MobileNavItem href="/projects">Projects</MobileNavItem>
-                <MobileNavItem href="/speaking">Speaking</MobileNavItem>
-                <MobileNavItem href="/uses">Uses</MobileNavItem>
+                <MobileNavItem href={`/${slug}/about`}>About</MobileNavItem>
+                <MobileNavItem href={`/${slug}/projects`}>Projects</MobileNavItem>
+                <MobileNavItem href={`/${slug}/uses`}>Uses</MobileNavItem>
               </ul>
             </nav>
           </Popover.Panel>
@@ -161,15 +158,13 @@ function NavItem({ href, children }) {
   )
 }
 
-function DesktopNavigation(props) {
+function DesktopNavigation({ slug, ...props}) {
   return (
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-        <NavItem href="/about">About</NavItem>
-        <NavItem href="/articles">Articles</NavItem>
-        <NavItem href="/projects">Projects</NavItem>
-        <NavItem href="/speaking">Speaking</NavItem>
-        <NavItem href="/uses">Uses</NavItem>
+        <NavItem href={`/${slug}/about`}>About</NavItem>
+        <NavItem href={`/${slug}/projects`}>Projects</NavItem>
+        <NavItem href={`/${slug}/uses`}>Uses</NavItem>
       </ul>
     </nav>
   )
@@ -218,15 +213,17 @@ function AvatarContainer({ className, ...props }) {
 function Avatar({ large = false, className, ...props }) {
   return (
     <Link
-      href="/"
+      href={`/${props.slug}`}
       aria-label="Home"
       className={clsx(className, 'pointer-events-auto')}
       {...props}
     >
       <Image
-        src={avatarImage}
+        src={props.imageurl}
         alt=""
         sizes={large ? '4rem' : '2.25rem'}
+        width={large ? 64 : 36}
+        height={large ? 64 : 36}
         className={clsx(
           'rounded-full bg-zinc-100 object-cover dark:bg-zinc-800',
           large ? 'h-16 w-16' : 'h-9 w-9'
@@ -237,8 +234,9 @@ function Avatar({ large = false, className, ...props }) {
   )
 }
 
-export function Header() {
+export function Header({ author }) {
   let isHomePage = usePathname() === '/'
+  const { slug } = useParams();
 
   let headerRef = useRef()
   let avatarRef = useRef()
@@ -375,6 +373,8 @@ export function Header() {
                     large
                     className="block h-16 w-16 origin-left"
                     style={{ transform: 'var(--avatar-image-transform)' }}
+                    imageurl={author.picture.url}
+                    slug={slug}
                   />
                 </div>
               </div>
@@ -394,13 +394,13 @@ export function Header() {
               <div className="flex flex-1">
                 {!isHomePage && (
                   <AvatarContainer>
-                    <Avatar />
+                    <Avatar imageurl={author.picture.url} slug={slug}/>
                   </AvatarContainer>
                 )}
               </div>
               <div className="flex flex-1 justify-end md:justify-center">
-                <MobileNavigation className="pointer-events-auto md:hidden" />
-                <DesktopNavigation className="pointer-events-auto hidden md:block" />
+                <MobileNavigation className="pointer-events-auto md:hidden" slug={slug} />
+                <DesktopNavigation className="pointer-events-auto hidden md:block" slug={slug} />
               </div>
               <div className="flex justify-end md:flex-1">
                 <div className="pointer-events-auto">

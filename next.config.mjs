@@ -5,6 +5,9 @@ import remarkGfm from 'remark-gfm'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx'],
+  images: {
+    domains: [ 'media.graphassets.com' ]
+  }
 }
 
 const withMDX = nextMDX({

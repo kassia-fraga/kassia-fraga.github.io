@@ -1,22 +1,47 @@
 import { gql } from "@apollo/client";
 
+const WORK_FRAGMENT = gql`
+    fragment WorkDetails on Work {
+        company
+        end
+        isPresent
+        start
+        title
+        logo {
+            url
+        }
+    }
+`
+
 const AUTHOR_FRAGMENT = gql`
     fragment AuthorDetails on Author {
         name
+        email
+        skills
+        title
         intro
-        bio
+        introAbout
+        bio {
+            html
+        }
         slug
         picture {
             url
         }
         social {
             twitterUrl
+            githubUsername
+            instagramUrl
+            linkedinUrl
+        }
+        works {
+            ...WorkDetails
         }
     }
 `
 
 export const authorsQuery = gql`
-    ${AUTHOR_FRAGMENT}
+    ${AUTHOR_FRAGMENT} ${WORK_FRAGMENT}
     query GetAuthors {
         authors {
             ...AuthorDetails
@@ -25,7 +50,7 @@ export const authorsQuery = gql`
 `
 
 export const authorQuery = gql`
-    ${AUTHOR_FRAGMENT}
+    ${AUTHOR_FRAGMENT} ${WORK_FRAGMENT}
     query GetAuthor($slug: String!) {
         author(where: { slug: $slug }) {
             ...AuthorDetails
