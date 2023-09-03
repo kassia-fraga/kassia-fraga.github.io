@@ -14,26 +14,26 @@ import { MailIcon } from '@/components/Icon'
 import { authorQuery } from '@/lib/queries'
 import { getClient } from '@/lib/client'
 
-function SocialLink({ className, href, children, icon: Icon }) {
-  return (
-    <li className={clsx(className, 'flex')}>
-      <Link
-        href={href}
-        className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
-      >
-        <Icon className="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-teal-500" />
-        <span className="ml-4">{children}</span>
-      </Link>
-    </li>
-  )
+
+export async function generateMetadata(
+  { params },
+  parent
+) {
+  // read route params
+  const slug = params.slug
+
+  const { data } = await getClient().query({
+    query: authorQuery,
+    variables: { slug },
+    context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
+  });
+
+  return {
+    title: `About | ${data.author.name}` ,
+    description: data.author.introAbout
+  }
 }
 
-
-export const metadata = {
-  title: 'About',
-  description:
-    'I’m Spencer Sharp. I live in New York City, where I design the future.',
-}
 
 export default async function About({ params : { slug } }) {
   const { data } = await getClient().query({
@@ -123,5 +123,19 @@ export default async function About({ params : { slug } }) {
         </div>
       </div>
     </Container>
+  )
+}
+
+function SocialLink({ className, href, children, icon: Icon }) {
+  return (
+    <li className={clsx(className, 'flex')}>
+      <Link
+        href={href}
+        className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
+      >
+        <Icon className="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-teal-500" />
+        <span className="ml-4">{children}</span>
+      </Link>
+    </li>
   )
 }

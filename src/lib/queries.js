@@ -66,7 +66,7 @@ const PROJECT_FRAGMENT = gql`
         tags
         demo
         sourceCode
-        image {
+        thumbnail {
             url
         }
     }
@@ -81,11 +81,34 @@ export const projectsQuery = gql`
     }
 `
 
+export const projectsSlugsQuery = gql`
+    query GetProjectsSlugs {
+        projects {
+            slug
+        }
+    }
+`
+
+export const projectsByAuthorQuery = gql`
+    ${PROJECT_FRAGMENT}
+    query GetProjectsByAuthor($slug: String!) {
+        projects(where: {authors_some: {slug: $slug}}) {
+            ...ProjectDetails
+        }
+    }
+`
+
 export const projectQuery = gql`
     ${PROJECT_FRAGMENT}
     query GetProject($slug: String!) {
         project(where: { slug: $slug }) {
             ...ProjectDetails
+            authors {
+                name
+            }
+            image {
+                url
+            }
         }
     }
 `

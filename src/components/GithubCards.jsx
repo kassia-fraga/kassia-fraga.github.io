@@ -1,7 +1,7 @@
 'use client'
 
 import { useTheme } from "next-themes"
-import { BriefcaseIcon } from "./Icon"
+import { BriefcaseIcon, SkillIcons } from "./Icon"
 import { Code } from "@phosphor-icons/react"
 
 export function GithubCards({ username, skills }) {
@@ -20,16 +20,10 @@ export function GithubCards({ username, skills }) {
             </h2>
             <div className="mt-6 space-y-4">
                 <div>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        alt=""
-                        height={'50em'}
-                        className="max-w-sm"
-                        src={`https://skillicons.dev/icons?i=${skills}`}
-                    />
+                    <SkillIcons skills={skills} />
                 </div>
 
-                <div>
+                <div className="-m-6">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         alt=""
@@ -41,4 +35,4 @@ export function GithubCards({ username, skills }) {
             </div>
         </div>
     )
-  }
+}
