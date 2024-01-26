@@ -19,7 +19,7 @@ async function getData(slug) {
 }
 
 
-export default async function RootLayout({
+export default async function SlugLayout({
   children,
   params: { slug }
 }) {

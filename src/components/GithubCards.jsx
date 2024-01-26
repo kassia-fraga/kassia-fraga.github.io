@@ -10,8 +10,6 @@ export function GithubCards({ username, skills }) {
     const titleColor = resolvedTheme === 'dark' ? 'f4f4f5' : '18181b'
     const textColor = resolvedTheme === 'dark' ? 'a1a1aa': '525251'
 
-    console.log(skills)
-
     return (
         <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
             <h2 className="flex items-center text-sm font-semibold text-zinc-900 dark:text-zinc-100">

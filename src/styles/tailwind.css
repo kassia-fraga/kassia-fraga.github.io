@@ -2,3 +2,12 @@
 @import 'tailwindcss/components';
 @import './prism.css';
 @import 'tailwindcss/utilities';
+
+.task-list-item {
+    padding-left: 5px !important;
+}
+
+.contains-task-list {
+    list-style-type: none !important;
+    padding-left: 0px !important;
+}

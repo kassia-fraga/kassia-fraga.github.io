@@ -4,8 +4,9 @@ import { getClient } from "@/lib/client";
 import { extractGitHubRepoPath } from "@/lib/functions";
 import { projectQuery, projectsSlugsQuery } from "@/lib/queries";
 import Image from "next/image";
-import { Base64 } from "js-base64";
-
+import Link from "next/link";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import remarkGfm from 'remark-gfm'
 
 export async function generateMetadata(
     { params },
@@ -35,22 +36,9 @@ export async function generateStaticParams() {
     return data.projects.map((p) => ({ slugProject: p.slug }));
 }
 
-async function getGithubRepo(username, repo) {
-    const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/README.md`)
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
-
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error('Failed to fetch data')
-    }
-
-    return res.json()
-}
-
 
 export default async function ProjectDetails({ params: { slugProject } }) {
-    let githubData;
+
 
     const { data } = await getClient().query({
         query: projectQuery,
@@ -58,11 +46,7 @@ export default async function ProjectDetails({ params: { slugProject } }) {
         context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
     });
 
-
-    if(data.project.sourceCode) {
-        const { username, repository } = extractGitHubRepoPath(data.project.sourceCode);
-        githubData = await getGithubRepo(username, repository);
-    }
+    const markdown = data.project.readme
 
     return (
         <Container className="mt-9">
@@ -112,12 +96,32 @@ export default async function ProjectDetails({ params: { slugProject } }) {
                 </div>
             </header>
 
-            <div className="mt-16 sm:mt-20">
-                {/* {
-                    githubData && (
-                        <div dangerouslySetInnerHTML={{__html: Base64.decode(githubData.content) }} />
-                    )
-                } */}
+            <div>
+                <ReactMarkdown className="prose prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl dark:prose-invert" remarkPlugins={[remarkGfm]} >
+                    { markdown }
+                </ReactMarkdown>
+            </div>
+
+            <div>
+                <h2 className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-4xl">Authors</h2>
+                <div className="my-3 isolate flex -space-x-2 ">
+                    { data.project.authors.map( a => (
+                        <Link key={a.slug} href={`/${a.slug}`}>
+                            <div className="relative z-30 inline-block">
+                                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10">
+                                    <Image
+                                        className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 h-14 w-14"
+                                        src={a.picture.url}
+                                        alt=""
+                                        width={64}
+                                        height={64}
+                                    />
+                                </div>
+                            </div>
+                        </Link>
+                    )) }
+
+                </div>
             </div>
 
         </Container>

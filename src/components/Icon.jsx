@@ -54,7 +54,7 @@ export function SkillIcons({ skills }) {
             alt=""
             height={'50em'}
             className="max-w-sm"
-            src={`https://skillicons.dev/icons?i=${skills}`}
+            src={`https://skillicons.dev/icons?i=${skills}&perline=6`}
         />
     )
 }

@@ -8,15 +8,11 @@ import {
   LinkedInIcon,
   TwitterIcon,
 } from '@/components/SocialIcons'
-import image1 from '@/images/photos/image-1.jpg'
-import image2 from '@/images/photos/image-2.jpg'
-import image3 from '@/images/photos/image-3.jpg'
-import image4 from '@/images/photos/image-4.jpg'
-import image5 from '@/images/photos/image-5.jpg'
 import { getClient } from "@/lib/client";
 import { authorQuery } from '@/lib/queries'
 import { Resume } from './components/Resume'
 import { GithubCards } from '@/components/GithubCards'
+import { SocialLink } from '@/components/SocialLink'
 
 export async function generateMetadata(
   { params },
@@ -44,6 +40,8 @@ export default async function Home({ params: { slug } }) {
     variables: { slug },
     context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
   });
+
+  if(!data.author) return (<div></div>)
 
   return (
     <>
@@ -100,12 +98,22 @@ export default async function Home({ params: { slug } }) {
 
         </div>
       </Container>
-      <Photos />
+      <Photos images={data.author.photos.map(p => p.url)} />
       <Container className="mt-24 md:mt-28">
-        <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-          <div className="flex flex-col gap-16">
-            <GithubCards username={data.author.social.githubUsername} skills={data.author.skills} />
-          </div>
+        <div className={
+          clsx(
+            "mx-auto grid max-w-xl grid-cols-1 gap-y-10 lg:gap-y-20  ",
+            data.author.social?.githubUsername && "lg:max-w-none lg:grid-cols-2"
+          )
+        }>
+          {
+            data.author.social?.githubUsername && (
+              <div className="flex flex-col gap-16">
+                <GithubCards username={data.author.social?.githubUsername} skills={data.author.skills} />
+              </div>
+            )
+          }
+
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             {/* <Newsletter /> */}
             <Resume works={data.author.works} />
@@ -116,21 +124,13 @@ export default async function Home({ params: { slug } }) {
   )
 }
 
-function SocialLink({ icon: Icon, ...props }) {
-  return (
-    <Link className="group -m-1 p-1" {...props}>
-      <Icon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
-    </Link>
-  )
-}
-
-function Photos() {
+function Photos({ images }) {
   let rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2']
 
   return (
     <div className="mt-16 sm:mt-20">
       <div className="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
-        {[image1, image2, image3, image4, image5].map((image, imageIndex) => (
+        {images.map((image, imageIndex) => (
           <div
             key={image.src}
             className={clsx(
@@ -143,6 +143,8 @@ function Photos() {
               alt=""
               sizes="(min-width: 640px) 18rem, 11rem"
               className="absolute inset-0 h-full w-full object-cover"
+              width={300}
+              height={500}
             />
           </div>
         ))}

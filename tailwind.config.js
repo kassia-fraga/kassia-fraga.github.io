@@ -101,12 +101,16 @@ module.exports = {
           'h2, h3': {
             color: 'var(--tw-prose-headings)',
             fontWeight: theme('fontWeight.semibold'),
+            paddingBottom: theme('spacing.2'),
+
           },
           h2: {
             fontSize: theme('fontSize.xl')[0],
             lineHeight: theme('lineHeight.7'),
             marginTop: theme('spacing.20'),
             marginBottom: theme('spacing.4'),
+            // borderBottomWidth: theme('borderWidth.2'),
+            // borderBottomColor: 'var(--tw-prose-quote-borders)',
           },
           h3: {
             fontSize: theme('fontSize.base')[0],

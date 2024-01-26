@@ -18,6 +18,7 @@ const AUTHOR_FRAGMENT = gql`
         name
         email
         skills
+        role
         title
         intro
         introAbout
@@ -34,7 +35,10 @@ const AUTHOR_FRAGMENT = gql`
             instagramUrl
             linkedinUrl
         }
-        works {
+        photos {
+            url
+        }
+        works(orderBy: start_DESC) {
             ...WorkDetails
         }
     }
@@ -66,6 +70,7 @@ const PROJECT_FRAGMENT = gql`
         tags
         demo
         sourceCode
+        readme
         thumbnail {
             url
         }
@@ -105,9 +110,10 @@ export const projectQuery = gql`
             ...ProjectDetails
             authors {
                 name
-            }
-            image {
-                url
+                slug
+                picture {
+                    url
+                }
             }
         }
     }

@@ -8,6 +8,8 @@ import { useTheme } from 'next-themes'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
+import AvatarDefault from '@/images/avatar.jpg'
+
 import { Container } from '@/components/Container'
 
 function CloseIcon(props) {
@@ -72,9 +74,18 @@ function MoonIcon(props) {
 }
 
 function MobileNavItem({ href, children }) {
+  let isActive = usePathname() === href
+
   return (
     <li>
-      <Popover.Button as={Link} href={href} className="block py-2">
+      <Popover.Button as={Link} href={href}
+        className={clsx(
+          "block py-2",
+          isActive
+            ? 'text-teal-500 dark:text-teal-400'
+            : 'hover:text-teal-500 dark:hover:text-teal-400'
+        )}
+      >
         {children}
       </Popover.Button>
     </li>
@@ -113,16 +124,15 @@ function MobileNavigation({slug, ...props}) {
             focus
             className="fixed inset-x-4 top-8 z-50 origin-top rounded-3xl bg-white p-8 ring-1 ring-zinc-900/5 dark:bg-zinc-900 dark:ring-zinc-800"
           >
-            <div className="flex flex-row-reverse items-center justify-between">
+            <div className="absolute top-5 right-5">
               <Popover.Button aria-label="Close menu" className="-m-1 p-1">
                 <CloseIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
               </Popover.Button>
-              <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                Navigation
-              </h2>
             </div>
-            <nav className="mt-6">
+            <nav>
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
+                <MobileNavItem href={`/`}>Team</MobileNavItem>
+                <MobileNavItem href={`/${slug}`}>Home</MobileNavItem>
                 <MobileNavItem href={`/${slug}/about`}>About</MobileNavItem>
                 <MobileNavItem href={`/${slug}/projects`}>Projects</MobileNavItem>
                 {/* <MobileNavItem href={`/${slug}/uses`}>Uses</MobileNavItem> */}
@@ -162,6 +172,8 @@ function DesktopNavigation({ slug, ...props}) {
   return (
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
+        <NavItem href={`/`}>Team</NavItem>
+        <NavItem href={`/${slug}`}>Home</NavItem>
         <NavItem href={`/${slug}/about`}>About</NavItem>
         <NavItem href={`/${slug}/projects`}>Projects</NavItem>
         {/* <NavItem href={`/${slug}/uses`}>Uses</NavItem> */}
@@ -214,12 +226,11 @@ function Avatar({ large = false, className, ...props }) {
   return (
     <Link
       href={`/${props.slug}`}
-      aria-label="Home"
       className={clsx(className, 'pointer-events-auto')}
       {...props}
     >
       <Image
-        src={props.imageurl}
+        src={props.imageurl ?? AvatarDefault}
         alt=""
         sizes={large ? '4rem' : '2.25rem'}
         width={large ? 64 : 36}
@@ -235,7 +246,8 @@ function Avatar({ large = false, className, ...props }) {
 }
 
 export function Header({ author }) {
-  let isHomePage = usePathname() === '/'
+  let isTeamPage = usePathname() === `/`
+  let isHomePage = usePathname() === `/${author?.slug}`
   const { slug } = useParams();
 
   let headerRef = useRef()
@@ -255,7 +267,7 @@ export function Header({ author }) {
     }
 
     function updateHeaderStyles() {
-      let { top, height } = headerRef.current.getBoundingClientRect()
+      let { top, height } = headerRef?.current?.getBoundingClientRect()
       let scrollY = clamp(
         window.scrollY,
         0,
@@ -347,7 +359,7 @@ export function Header({ author }) {
           marginBottom: 'var(--header-mb)',
         }}
       >
-        {isHomePage && (
+        {(isHomePage && !isTeamPage) && (
           <>
             <div
               ref={avatarRef}
@@ -392,16 +404,21 @@ export function Header({ author }) {
           >
             <div className="relative flex gap-4">
               <div className="flex flex-1">
-                {!isHomePage && (
+                {!isHomePage && !isTeamPage && (
                   <AvatarContainer>
-                    <Avatar imageurl={author.picture.url} slug={slug}/>
+                    <Avatar imageurl={author?.picture.url} slug={slug}/>
                   </AvatarContainer>
                 )}
               </div>
-              <div className="flex flex-1 justify-end md:justify-center">
-                <MobileNavigation className="pointer-events-auto md:hidden" slug={slug} />
-                <DesktopNavigation className="pointer-events-auto hidden md:block" slug={slug} />
-              </div>
+              {
+                !isTeamPage && (
+                  <div className="flex flex-1 justify-end md:justify-center">
+                    <MobileNavigation className="pointer-events-auto md:hidden" slug={slug} />
+                    <DesktopNavigation className="pointer-events-auto hidden md:block" slug={slug} />
+                  </div>
+                )
+              }
+
               <div className="flex justify-end md:flex-1">
                 <div className="pointer-events-auto">
                   <ThemeToggle />

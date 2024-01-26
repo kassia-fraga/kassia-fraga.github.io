@@ -61,12 +61,16 @@ export default async function About({ params : { slug } }) {
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
             {data.author.introAbout}
           </h1>
-          <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400" dangerouslySetInnerHTML={{__html: data.author.bio.html}} />
+          {
+            data.author.bio && (
+              <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400" dangerouslySetInnerHTML={{__html: data.author.bio.html}} />
+            )
+          }
         </div>
         <div className="lg:pl-20">
           <ul role="list">
             {
-              data.author.social.twitterUrl && (
+              data.author.social?.twitterUrl && (
                 <SocialLink
                   href={data.author.social.twitterUrl}
                   aria-label="Follow on Twitter"
@@ -77,7 +81,7 @@ export default async function About({ params : { slug } }) {
               )
             }
             {
-              data.author.social.githubUsername && (
+              data.author.social?.githubUsername && (
                 <SocialLink
                   href={`https://github.com/${data.author.social.githubUsername}`}
                   aria-label="Follow on Github"
@@ -89,7 +93,7 @@ export default async function About({ params : { slug } }) {
               )
             }
             {
-              data.author.social.linkedinUrl && (
+              data.author.social?.linkedinUrl && (
                 <SocialLink
                   href={data.author.social.linkedinUrl}
                   aria-label="Follow on LinkedIn"
@@ -101,7 +105,7 @@ export default async function About({ params : { slug } }) {
               )
             }
             {
-              data.author.social.instagramUrl && (
+              data.author.social?.instagramUrl && (
                 <SocialLink
                   href={data.author.social.instagramUrl}
                   aria-label="Follow on Instagram"
