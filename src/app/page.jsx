@@ -10,6 +10,7 @@ import {
     InstagramIcon,
     LinkedInIcon,
     TwitterIcon,
+    BehanceIcon
 } from '@/components/SocialIcons'
 
 export default async function Home() {
@@ -115,6 +116,16 @@ export default async function Home() {
                                                                         href={person.social.instagramUrl}
                                                                         aria-label="Follow on Instagram"
                                                                         icon={InstagramIcon}
+                                                                    />
+                                                                )
+                                                            }
+
+                                                            {
+                                                                person.social.behanceUrl && (
+                                                                    <SocialLink
+                                                                        href={person.social.behanceUrl}
+                                                                        aria-label="Follow on Behance"
+                                                                        icon={BehanceIcon}
                                                                     />
                                                                 )
                                                             }

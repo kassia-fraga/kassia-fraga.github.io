@@ -34,6 +34,7 @@ const AUTHOR_FRAGMENT = gql`
             githubUsername
             instagramUrl
             linkedinUrl
+            behanceUrl
         }
         photos {
             url

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { Container } from '@/components/Container'
 import {
+  BehanceIcon,
   GitHubIcon,
   InstagramIcon,
   LinkedInIcon,
@@ -89,6 +90,15 @@ export default async function Home({ params: { slug } }) {
                       href={data.author.social.instagramUrl}
                       aria-label="Follow on Instagram"
                       icon={InstagramIcon}
+                    />
+                  )
+                }
+                {
+                  data.author.social.behanceUrl && (
+                    <SocialLink
+                      href={data.author.social.behanceUrl}
+                      aria-label="Follow on Behance"
+                      icon={BehanceIcon}
                     />
                   )
                 }
