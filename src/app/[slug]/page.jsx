@@ -112,17 +112,14 @@ export default async function Home({ params: { slug } }) {
       <Container className="mt-24 md:mt-28">
         <div className={
           clsx(
-            "mx-auto grid max-w-xl grid-cols-1 gap-y-10 lg:gap-y-20  ",
-            data.author.social?.githubUsername && "lg:max-w-none lg:grid-cols-2"
+            "mx-auto grid max-w-xl grid-cols-1 gap-y-10 lg:gap-y-20 lg:max-w-none lg:grid-cols-2"
           )
         }>
-          {
-            data.author.social?.githubUsername && (
-              <div className="flex flex-col gap-16">
-                <GithubCards username={data.author.social?.githubUsername} skills={data.author.skills} />
-              </div>
-            )
-          }
+
+          <div className="flex flex-col gap-16">
+            <GithubCards username={data.author.social?.githubUsername} skills={data.author.skills} />
+          </div>
+
 
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             {/* <Newsletter /> */}

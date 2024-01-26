@@ -21,15 +21,21 @@ export function GithubCards({ username, skills }) {
                     <SkillIcons skills={skills} />
                 </div>
 
-                <div className="-m-6">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        alt=""
-                        height={'50em'}
-                        className="max-w-sm"
-                        src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&langs_count=7&theme=transparent&title_color=${titleColor}&text_color=${textColor}&hide_border=true`}
-                    />
-                </div>
+                {
+                    username && (
+                        <div className="-m-6">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                alt=""
+                                height={'50em'}
+                                className="max-w-sm"
+                                src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&langs_count=7&theme=transparent&title_color=${titleColor}&text_color=${textColor}&hide_border=true`}
+                            />
+                        </div>
+                    )
+                }
+
+
             </div>
         </div>
     )

@@ -50,6 +50,7 @@ export function MailIcon(props) {
 export function SkillIcons({ skills }) {
     return (
         // eslint-disable-next-line @next/next/no-img-element
+        // https://github.com/tandpfun/skill-icons?tab=readme-ov-file#icons-list
         <img
             alt=""
             height={'50em'}
