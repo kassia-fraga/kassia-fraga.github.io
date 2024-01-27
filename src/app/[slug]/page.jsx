@@ -31,13 +31,15 @@ export async function generateMetadata(
   return {
     title: `Home | ${data.author?.name}` ,
     description: data.author?.title,
-    images: [
-      {
-        url: data.author?.picture.url, // Must be an absolute URL
-        width: 800,
-        height: 600,
-      },
-    ]
+    openGraph: {
+      images: [
+        {
+          url: data.author?.picture.url, // Must be an absolute URL
+          width: 800,
+          height: 600,
+        },
+      ]
+    }
   }
 }
 
