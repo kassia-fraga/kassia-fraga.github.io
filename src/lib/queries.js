@@ -98,7 +98,7 @@ export const projectsSlugsQuery = gql`
 export const projectsByAuthorQuery = gql`
     ${PROJECT_FRAGMENT}
     query GetProjectsByAuthor($slug: String!) {
-        projects(where: {authors_some: {slug: $slug}}) {
+        projects(where: {authors_some: {slug: $slug}}, orderBy: order_ASC) {
             ...ProjectDetails
         }
     }
