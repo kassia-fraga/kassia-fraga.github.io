@@ -1,8 +1,9 @@
+import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
-import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
+import { MailIcon } from '@/components/Icon'
 import {
   BehanceIcon,
   GitHubIcon,
@@ -10,10 +11,8 @@ import {
   LinkedInIcon,
   TwitterIcon,
 } from '@/components/SocialIcons'
-import portraitImage from '@/images/portrait.jpg'
-import { MailIcon } from '@/components/Icon'
-import { authorQuery } from '@/lib/queries'
 import { getClient } from '@/lib/client'
+import { authorQuery } from '@/lib/queries'
 
 
 export async function generateMetadata(
@@ -21,7 +20,7 @@ export async function generateMetadata(
   parent
 ) {
   // read route params
-  const slug = params.slug
+  const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   const { data } = await getClient().query({
     query: authorQuery,
@@ -36,10 +35,10 @@ export async function generateMetadata(
 }
 
 
-export default async function About({ params : { slug } }) {
+export default async function About() {
   const { data } = await getClient().query({
     query: authorQuery,
-    variables: { slug },
+    variables: { slug: process.env.NEXT_PUBLIC_GITHUB_USERNAME },
     context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
   });
 
@@ -84,7 +83,7 @@ export default async function About({ params : { slug } }) {
             {
               data.author.social?.githubUsername && (
                 <SocialLink
-                  href={`https://github.com/${data.author.social.githubUsername}`}
+                  href={`https://github.com/${process.env.NEXT_PUBLIC_GITHUB_USERNAME}`}
                   aria-label="Follow on Github"
                   icon={GitHubIcon}
                   className="mt-4"
@@ -149,6 +148,7 @@ function SocialLink({ className, href, children, icon: Icon }) {
       <Link
         href={href}
         className="group flex text-sm font-medium text-zinc-800 transition hover:text-teal-500 dark:text-zinc-200 dark:hover:text-teal-500"
+        target='_blank'
       >
         <Icon className="h-6 w-6 flex-none fill-zinc-500 transition group-hover:fill-teal-500" />
         <span className="ml-4">{children}</span>

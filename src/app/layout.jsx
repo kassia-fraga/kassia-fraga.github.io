@@ -1,6 +1,10 @@
-import { Providers } from '@/app/providers'
+import { Providers } from '@/app/providers';
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
+import { getClient } from "@/lib/client";
+import { authorQuery } from '@/lib/queries';
 
-import '@/styles/tailwind.css'
+import '@/styles/tailwind.css';
 
 export const metadata = {
   alternates: {
@@ -10,7 +14,20 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }) {
+async function getData() {
+  const { data } = await getClient().query({
+    query: authorQuery,
+    variables: { slug: process.env.NEXT_PUBLIC_GITHUB_USERNAME },
+    context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
+  });
+
+  return data
+}
+
+
+export default async function RootLayout({ children }) {
+  const data = await getData()
+
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <body className="flex h-full bg-zinc-50 dark:bg-black">
@@ -23,7 +40,11 @@ export default function RootLayout({ children }) {
             </div>
 
             <div className="relative flex w-full flex-col">
-              {children}
+              <div className="relative flex w-full flex-col">
+                <Header author={data.author} />
+                  <main main className="flex-auto">{children}</main>
+                <Footer />
+              </div>
             </div>
           </div>
         </Providers>

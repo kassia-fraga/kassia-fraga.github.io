@@ -1,8 +1,6 @@
-import Image from 'next/image'
-import { Button } from '@/components/Button'
-import { ArrowDownIcon } from '@/components/Icon'
-import { parseISO } from 'date-fns'
 import { Laptop } from '@/components/PhosphorIcons'
+import { parseISO } from 'date-fns'
+import Image from 'next/image'
 
 
 export function Resume({ works }) {
@@ -51,10 +49,10 @@ export function Resume({ works }) {
 
 
       </ol>
-      <Button href="#" variant="secondary" className="group mt-6 w-full">
+      {/* <Button href="#" variant="secondary" className="group mt-6 w-full">
         Download CV
         <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
-      </Button>
+      </Button> */}
     </div>
   )
 }

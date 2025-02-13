@@ -1,11 +1,11 @@
 import Image from 'next/image'
 
 import { Card } from '@/components/Card'
-import { SimpleLayout } from '@/components/SimpleLayout'
 import { LinkIcon } from '@/components/Icon'
-import { authorQuery, projectsByAuthorQuery } from '@/lib/queries'
-import { getClient } from '@/lib/client'
 import { ReadMore } from '@/components/ReadMore'
+import { SimpleLayout } from '@/components/SimpleLayout'
+import { getClient } from '@/lib/client'
+import { authorQuery, projectsByAuthorQuery } from '@/lib/queries'
 
 
 export async function generateMetadata(
@@ -13,7 +13,7 @@ export async function generateMetadata(
   parent
 ) {
   // read route params
-  const slug = params.slug
+  const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME
 
   const { data } = await getClient().query({
     query: authorQuery,
@@ -27,7 +27,10 @@ export async function generateMetadata(
   }
 }
 
-export default async function Projects({ params: { slug } }) {
+export default async function Projects() {
+  const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME
+  const base = process.env.NODE_ENV === 'production' ? `/${slug}/` : '/'
+
   const { data } = await getClient().query({
     query: projectsByAuthorQuery,
     variables: { slug },
@@ -59,7 +62,7 @@ export default async function Projects({ params: { slug } }) {
                     />
                   </div>
                   <h2 className="mt-6 text-base font-semibold text-zinc-800 dark:text-zinc-100">
-                    <Card.Link href={`/${slug}/projects/${project.slug}`}>{project.name}</Card.Link>
+                    <Card.Link href={`${base}projects/${project.slug}`}>{project.name}</Card.Link>
                   </h2>
                   <Card.Description>
                     <ReadMore>

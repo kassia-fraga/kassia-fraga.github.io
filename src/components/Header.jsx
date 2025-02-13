@@ -1,14 +1,12 @@
 'use client'
 
-import { Fragment, useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useParams, usePathname, useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
-
-import AvatarDefault from '@/images/avatar.jpg'
+import { useTheme } from 'next-themes'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useParams, usePathname } from 'next/navigation'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { Container } from '@/components/Container'
 
@@ -93,6 +91,7 @@ function MobileNavItem({ href, children }) {
 }
 
 function MobileNavigation({slug, ...props}) {
+  const base = process.env.NODE_ENV === 'production' ? `${process.env.NEXT_PUBLIC_GITHUB_USERNAME}/` : '/'
   return (
     <Popover {...props}>
       <Popover.Button className="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20">
@@ -131,11 +130,9 @@ function MobileNavigation({slug, ...props}) {
             </div>
             <nav>
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                <MobileNavItem href={`/`}>Team</MobileNavItem>
-                <MobileNavItem href={`/${slug}`}>Home</MobileNavItem>
-                <MobileNavItem href={`/${slug}/about`}>About</MobileNavItem>
-                <MobileNavItem href={`/${slug}/projects`}>Projects</MobileNavItem>
-                {/* <MobileNavItem href={`/${slug}/uses`}>Uses</MobileNavItem> */}
+                <MobileNavItem href={`${base}`}>Home</MobileNavItem>
+                <MobileNavItem href={`${base}about`}>About</MobileNavItem>
+                <MobileNavItem href={`${base}projects`}>Projects</MobileNavItem>
               </ul>
             </nav>
           </Popover.Panel>
@@ -146,7 +143,7 @@ function MobileNavigation({slug, ...props}) {
 }
 
 function NavItem({ href, children }) {
-  let isActive = usePathname() === href
+  let isActive = usePathname() === href 
 
   return (
     <li>
@@ -169,14 +166,13 @@ function NavItem({ href, children }) {
 }
 
 function DesktopNavigation({ slug, ...props}) {
+  const base = process.env.NODE_ENV === 'production' ? `${process.env.NEXT_PUBLIC_GITHUB_USERNAME}/` : '/'
   return (
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-        <NavItem href={`/`}>Team</NavItem>
-        <NavItem href={`/${slug}`}>Home</NavItem>
-        <NavItem href={`/${slug}/about`}>About</NavItem>
-        <NavItem href={`/${slug}/projects`}>Projects</NavItem>
-        {/* <NavItem href={`/${slug}/uses`}>Uses</NavItem> */}
+        <NavItem href={`${base}`}>Home</NavItem>
+        <NavItem href={`${base}about`}>About</NavItem>
+        <NavItem href={`${base}projects`}>Projects</NavItem>
       </ul>
     </nav>
   )
@@ -223,14 +219,15 @@ function AvatarContainer({ className, ...props }) {
 }
 
 function Avatar({ large = false, className, ...props }) {
+  const base = process.env.NODE_ENV === 'production' ? `/${process.env.NEXT_PUBLIC_GITHUB_USERNAME}` : '/'
   return (
     <Link
-      href={`/${props.slug}`}
+      href={`${base}`}
       className={clsx(className, 'pointer-events-auto')}
       {...props}
     >
       <Image
-        src={props.imageurl ?? AvatarDefault}
+        src={props.imageurl ?? ""}
         alt=""
         sizes={large ? '4rem' : '2.25rem'}
         width={large ? 64 : 36}
@@ -246,8 +243,8 @@ function Avatar({ large = false, className, ...props }) {
 }
 
 export function Header({ author }) {
-  let isTeamPage = usePathname() === `/`
-  let isHomePage = usePathname() === `/${author?.slug}`
+  const pathname = usePathname()
+  let isHomePage = pathname === `/${author?.slug}` || pathname === `/`
   const { slug } = useParams();
 
   let headerRef = useRef()
@@ -359,7 +356,7 @@ export function Header({ author }) {
           marginBottom: 'var(--header-mb)',
         }}
       >
-        {(isHomePage && !isTeamPage) && (
+        { (isHomePage) && (
           <>
             <div
               ref={avatarRef}
@@ -385,7 +382,7 @@ export function Header({ author }) {
                     large
                     className="block h-16 w-16 origin-left"
                     style={{ transform: 'var(--avatar-image-transform)' }}
-                    imageurl={author.picture.url}
+                    imageurl={author?.picture?.url}
                     slug={slug}
                   />
                 </div>
@@ -404,14 +401,14 @@ export function Header({ author }) {
           >
             <div className="relative flex gap-4">
               <div className="flex flex-1">
-                {!isHomePage && !isTeamPage && (
+                {!isHomePage && (
                   <AvatarContainer>
-                    <Avatar imageurl={author?.picture.url} slug={slug}/>
+                    <Avatar imageurl={author?.picture?.url} slug={slug}/>
                   </AvatarContainer>
                 )}
               </div>
               {
-                !isTeamPage && (
+                true && (
                   <div className="flex flex-1 justify-end md:justify-center">
                     <MobileNavigation className="pointer-events-auto md:hidden" slug={slug} />
                     <DesktopNavigation className="pointer-events-auto hidden md:block" slug={slug} />
