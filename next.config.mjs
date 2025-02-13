@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm'
 const nextConfig = {
   output: "export",
   pageExtensions: ['js', 'jsx', 'mdx'],
-  basePath: process.env.NODE_ENV === 'production' ? `/${process.env.NEXT_PUBLIC_GITHUB_USERNAME}` : "",
+  basePath: process.env.NODE_ENV === 'production' ? `/${process.env.BASEPATH}` : "",
   images: {
     unoptimized: true,
     domains: [ 'media.graphassets.com' ]
