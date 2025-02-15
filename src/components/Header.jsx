@@ -91,7 +91,6 @@ function MobileNavItem({ href, children }) {
 }
 
 function MobileNavigation({slug, ...props}) {
-  const base = process.env.NODE_ENV === 'production' ? `${process.env.BASEPATH}/` : '/'
   return (
     <Popover {...props}>
       <Popover.Button className="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20">
@@ -130,9 +129,9 @@ function MobileNavigation({slug, ...props}) {
             </div>
             <nav>
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                <MobileNavItem href={`${base}`}>Home</MobileNavItem>
-                <MobileNavItem href={`${base}about`}>About</MobileNavItem>
-                <MobileNavItem href={`${base}projects`}>Projects</MobileNavItem>
+                <MobileNavItem href={`/`}>Home</MobileNavItem>
+                <MobileNavItem href={`/about`}>About</MobileNavItem>
+                <MobileNavItem href={`/projects`}>Projects</MobileNavItem>
               </ul>
             </nav>
           </Popover.Panel>
@@ -166,13 +165,12 @@ function NavItem({ href, children }) {
 }
 
 function DesktopNavigation({ slug, ...props}) {
-  const base = process.env.NODE_ENV === 'production' ? `${process.env.BASEPATH}/` : '/'
   return (
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-        <NavItem href={`${base}`}>Home</NavItem>
-        <NavItem href={`${base}about`}>About</NavItem>
-        <NavItem href={`${base}projects`}>Projects</NavItem>
+        <NavItem href={`/`}>Home</NavItem>
+        <NavItem href={`/about`}>About</NavItem>
+        <NavItem href={`/projects`}>Projects</NavItem>
       </ul>
     </nav>
   )
@@ -219,10 +217,9 @@ function AvatarContainer({ className, ...props }) {
 }
 
 function Avatar({ large = false, className, ...props }) {
-  const base = process.env.NODE_ENV === 'production' ? `/${process.env.BASEPATH}/` : '/'
   return (
     <Link
-      href={`${base}`}
+      href={`/`}
       className={clsx(className, 'pointer-events-auto')}
       {...props}
     >
