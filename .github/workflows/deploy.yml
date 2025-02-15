@@ -32,6 +32,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Configure environment variables
+        run: |
+          echo "NEXT_PUBLIC_HYGRAPH_ENDPOINT=${{ secrets.NEXT_PUBLIC_HYGRAPH_ENDPOINT }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_GITHUB_USERNAME=${{ secrets.NEXT_PUBLIC_GITHUB_USERNAME }}" >> $GITHUB_ENV
+          echo "BASEPATH=${{ secrets.BASEPATH }}" >> $GITHUB_ENV
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
