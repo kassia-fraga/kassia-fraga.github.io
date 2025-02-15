@@ -29,7 +29,6 @@ export async function generateMetadata(
 
 export default async function Projects() {
   const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME
-  const base = process.env.NODE_ENV === 'production' ? `/${slug}/` : '/'
 
   const { data } = await getClient().query({
     query: projectsByAuthorQuery,
@@ -62,7 +61,7 @@ export default async function Projects() {
                     />
                   </div>
                   <h2 className="mt-6 text-base font-semibold text-zinc-800 dark:text-zinc-100">
-                    <Card.Link href={`${base}projects/${project.slug}`}>{project.name}</Card.Link>
+                    <Card.Link href={`/projects/${project.slug}`}>{project.name}</Card.Link>
                   </h2>
                   <Card.Description>
                     <ReadMore>
