@@ -22,7 +22,7 @@ export async function generateMetadata(
   });
 
   return {
-    title: `Projects | ${data.author.name}` ,
+    title: `Projects` ,
     description: 'Things I’ve made trying to put my dent in the universe.',
   }
 }

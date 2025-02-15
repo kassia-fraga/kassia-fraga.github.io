@@ -14,30 +14,33 @@ import clsx from 'clsx';
 import { Photos } from './components/Photos';
 import { Resume } from './components/Resume';
 
-export async function generateMetadata() {
-    // read route params
-    const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+// export async function generateMetadata() {
+//     // read route params
+//     const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
   
-    const { data } = await getClient().query({
-      query: authorQuery,
-      variables: { slug },
-      context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
-    });
+//     const { data } = await getClient().query({
+//       query: authorQuery,
+//       variables: { slug },
+//       context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
+//     });
   
-    return {
-      title: `Home | ${data.author?.name}` ,
-      description: data.author?.title,
-      openGraph: {
-        images: [
-          {
-            url: data.author?.picture.url, // Must be an absolute URL
-            width: 800,
-            height: 600,
-          },
-        ]
-      }
-    }
-  }
+//     return {
+//         title: `Home | ${data.author?.name}` ,
+//         description: data.author?.title,
+//         openGraph: {
+//             images: [
+//                 {
+//                     url: data.author?.picture.url, // Must be an absolute URL
+//                     width: 800,
+//                     height: 600,
+//                 },
+//             ]
+//         },
+//         icons: {
+
+//         }
+//     }
+// }
 
 export default async function Home() {
     const { data } = await getClient().query({

@@ -1,12 +1,11 @@
 import { Container } from "@/components/Container";
 import { LinkIcon, SkillIcons } from "@/components/Icon";
 import { getClient } from "@/lib/client";
-import { extractGitHubRepoPath } from "@/lib/functions";
 import { projectQuery, projectsSlugsQuery } from "@/lib/queries";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import remarkGfm from 'remark-gfm'
+import remarkGfm from 'remark-gfm';
 
 export async function generateMetadata(
     { params },
@@ -22,7 +21,7 @@ export async function generateMetadata(
     });
 
     return {
-      title: `${data.project.authors.map(a => a.name).join(",")} | ${data.project.name}` ,
+      title: `${data.project.name}` ,
       description: data.project.description
     }
 }

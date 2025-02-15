@@ -29,7 +29,7 @@ export async function generateMetadata(
   });
 
   return {
-    title: `About | ${data.author.name}` ,
+    title: `About` ,
     description: data.author.introAbout
   }
 }

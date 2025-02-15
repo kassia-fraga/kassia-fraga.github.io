@@ -6,12 +6,43 @@ import { authorQuery } from '@/lib/queries';
 
 import '@/styles/tailwind.css';
 
-export const metadata = {
-  alternates: {
-    types: {
-      'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
+// export const metadata = {
+//   alternates: {
+//     types: {
+//       'application/rss+xml': `${process.env.NEXT_PUBLIC_SITE_URL}/feed.xml`,
+//     },
+//   },
+// }
+
+export async function generateMetadata() {
+  // read route params
+  const slug = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+
+  const { data } = await getClient().query({
+    query: authorQuery,
+    variables: { slug },
+    context: { fetchOptions: { next: { revalidate: 5 } } } // revalidate every 5 seconds
+  });
+
+  return {
+    title: {
+      default: `${data.author?.name}`,
+      template: `%s | ${data.author?.name}`,
     },
-  },
+    description: data.author?.title,
+    openGraph: {
+      images: [
+        {
+          url: data.author?.picture.url, // Must be an absolute URL
+          width: 800,
+          height: 600,
+        },
+      ]
+    },
+    icons: {
+      icon: data.author?.picture.url,
+    }
+  }
 }
 
 async function getData() {
